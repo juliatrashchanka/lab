@@ -1,0 +1,346 @@
+#include <iostream>
+#include <string.h>
+#include <iomanip>
+#include <stdlib.h>
+#include <windows.h>
+
+using namespace std;
+
+class Virus
+{
+protected:
+	string simmkaps;//симметрия капсоидов
+	string nalob;// наличие оболочки капсидов
+	
+public:
+	Virus(string simmkaps = "", string nalob = "")
+	{
+		this->simmkaps = simmkaps;
+		this->nalob = nalob;		
+	}
+
+	void setSimmkaps(string simmkaps)
+	{
+		this->simmkaps = simmkaps;
+	}
+
+	void setNalob(string nalob)
+	{
+		this->nalob = nalob;
+	}
+};
+class Desoksivirus : public Virus
+{
+protected:
+	int kolvocepey;
+	string typekisl;//тип кислоты (dc or cc)
+public:
+	Desoksivirus(string simmkaps = "", string nalob = "", int kolvocepey = 0, string typekisl = "") : Virus(simmkaps, nalob)
+	{
+		this->kolvocepey = kolvocepey;
+		this->typekisl = typekisl;
+	}
+
+	void setkolvocepey(int kolvocepey)
+	{
+		this->kolvocepey = kolvocepey;
+	}
+
+	void settypekisl(string typekisl)
+	{
+		this->typekisl = typekisl;
+	}
+
+	void Print()
+	{
+		cout << "Симметрия капсоидов: " << this->simmkaps << ";\nНаличие оболочки капсидов: " << this->nalob << ";\nКоличество цепей ДНК: " << this->kolvocepey << ";\nТип нуклеиновой кислоты: " << this->typekisl << endl;
+	}
+};
+class Rybovirus : public Virus
+{
+protected:
+	int gruppa;
+	string bolezn;
+public:
+	Rybovirus(string simmkaps = "", string nalob = "", int gruppa = 0, string bolezn = "") : Virus(simmkaps, nalob)
+	{
+		this->gruppa = gruppa;
+		this->bolezn = bolezn;
+	}
+
+	void setgruppa(int gruppa)
+	{
+		this->gruppa = gruppa;
+	}
+
+	void setbolezn(string bolezn)
+	{
+		this->bolezn = bolezn;
+	}
+
+	void Print()
+	{
+		cout << "Симметрия капсоидов: " << this->simmkaps << ";\nНаличие оболочки капсидов: " << this->nalob << ";\nГруппа: " << this->gruppa << ";\nЗаболевание: " << this->bolezn << endl;
+	}
+};
+
+int numericNumber();
+string correctString();
+int mainMenu();
+void rybovirus(Rybovirus& rybovirus);
+void desoksivirus(Desoksivirus& desoksivirus); 
+
+
+	int main()
+	{
+		SetConsoleCP(1251);
+		SetConsoleOutputCP(1251);
+		setlocale(LC_ALL, "rus");
+		Rybovirus gRybovirus;
+		Desoksivirus gDesoksivirus;		
+
+		while (true)
+		{
+			switch (mainMenu())
+			{
+			case 1:
+				rybovirus(gRybovirus);
+				system("cls");
+				break;
+			case 2:
+				desoksivirus(gDesoksivirus);
+				system("cls");
+				break;
+			default:
+				system("pause");
+				return 0;
+			}
+		}
+	}
+
+	int mainMenu()
+	{
+		int selection = 0;
+		 
+		cout << "1.Рибовирус.\n2.Дезоксивирус.\nДругое - выход" << endl;
+		cout << "Введите: ";
+
+		selection = numericNumber();
+		cout << "\n";
+
+		return selection;
+	}
+	string correctString()
+	{
+		bool tr;
+		string str;
+		do
+		{
+			tr = false;
+			cin >> str;
+			for (int i = 0; i < str.length(); i++)
+			{
+				if ((str[i] < 'A' || str[i] > 'Z') && (str[i] < 'а' || str[i] > 'я')&&(str[i] < 'А' || str[i] > 'Я') &&(str[i] < 'a' || str[i] > 'z'))
+				{
+					tr = true;
+					cout << "Некорректный ввод строки!\nПопробуйте снова: ";
+					break;
+				}
+			}
+		} while (tr);
+
+		return str;
+	}
+
+	int numericNumber()
+	{
+		int number;
+		cin >> number;
+
+		while (cin.get() != '\n')
+		{
+			cout << "Некорректный ввод!" << endl;
+			cout << "Введите снова: ";
+			cin.clear();
+			cin.ignore(256, '\n');
+			cin >> number;
+		}
+
+		return number;
+	}
+
+	void rybovirus(Rybovirus& rybovirus)
+	{
+		while (true)
+		{
+			int selection = 0;
+
+			cout << "1.Установить симметрию капсоидов.\n2.Установить наличие оболочки капсидов.\n3.Установить группу.\n4.Установить заболевание.\n5.Вывести информацию.\nДругое - выход" << endl;
+			selection = numericNumber();
+			//cout << "Симметрия капсоидов: " << this->simmkaps << ";\nНаличие оболочки капсидов: " << this->nalob << ";\nГруппа: " << this->gruppa << ";\nЗаболевание: " << this->bolezn
+			switch (selection)
+			{
+			case 1:
+			{
+				string newsimmkaps;
+
+				cout << "Введите симметрию капсоидов: ";
+				newsimmkaps = correctString();
+				rybovirus.setSimmkaps(newsimmkaps);
+
+				break;
+			}
+			case 2:
+			{
+				string newnalob;
+				bool trigger;
+
+				do
+				{
+					trigger = false;
+					cout << "Введите наличие оболочки капсидов (отсутствует или имеется): ";
+					newnalob = correctString();
+
+					if (newnalob != "отсутствует" && newnalob != "имеется")
+					{
+						trigger = true;
+						cout << "Введите отсутствует или имеется!" << endl;
+					}
+
+				} while (trigger);
+
+				rybovirus.setNalob(newnalob);
+				break;
+			}
+			case 3:
+			{
+				bool trigger;
+				int newgruppa;
+
+				do
+				{
+					trigger = false;
+					cout << "Введите группу: ";
+					newgruppa = numericNumber();
+
+					if ((newgruppa < 1)&&(newgruppa >7))
+					{
+						trigger = true;
+						cout << "Такой группы не существует!" << endl;
+					}
+				} while (trigger);
+
+				rybovirus.setgruppa(newgruppa);
+
+				break;
+			}
+			case 4:
+			{
+				string newbolezn;
+
+				cout << "Введите симметрию капсоидов: ";
+				newbolezn = correctString();
+				rybovirus.setbolezn(newbolezn);
+
+				break;
+			}
+			case 5:
+			{
+				rybovirus.Print();
+				break;
+			}
+			default: return;
+			}
+
+			system("pause");
+			system("cls");
+		}
+	}
+	void desoksivirus(Desoksivirus& desoksivirus)
+	{
+		while (true)
+		{
+			int selection = 0;
+
+			cout << "1.Установить симметрию капсоидов.\n2.Установить наличие оболочки капсидов.\n3.Установить количество цепей ДНК.\n4.Установить тип нуклеиновой кислоты.\n5.Вывести информацию.\nДругое - выход" << endl;
+			selection = numericNumber();
+			//оличество цепей ДНК: " << this->kolvocepey << ";\nТип нуклеиновой кислоты: " << this->typekisl << endl;
+		
+			switch (selection)
+			{
+			case 1:
+			{
+				string newsimmkaps;
+
+				cout << "Введите симметрию капсоидов: ";
+				newsimmkaps = correctString();
+				desoksivirus.setSimmkaps(newsimmkaps);
+
+				break;
+			}
+			case 2:
+			{
+				string newnalob;
+				bool trigger;
+
+				do
+				{
+					trigger = false;
+					cout << "Введите наличие оболочки капсидов (отсутствует или имеется): ";
+					newnalob = correctString();
+
+					if (newnalob != "отсутствует" && newnalob != "имеется")
+					{
+						trigger = true;
+						cout << "Введите отсутствует или имеется!" << endl;
+					}
+
+				} while (trigger);
+
+				desoksivirus.setNalob(newnalob);
+				break;
+			}
+			case 3:
+			{
+				bool trigger;
+				int newkolvocepey;
+
+				do
+				{
+					trigger = false;
+					cout << "Введите количество цепей ДНК: ";
+					newkolvocepey = numericNumber();
+
+					if ((newkolvocepey != 1) && (newkolvocepey !=2))
+					{
+						trigger = true;
+						cout << "Введите 1 или 2!" << endl;
+					}
+				} while (trigger);
+
+				desoksivirus. setkolvocepey(newkolvocepey);
+
+				break;
+			}
+			case 4:
+			{
+				string newtypekisl;
+
+				cout << "Введите тип нуклеиновой кислоты: ";
+				newtypekisl = correctString();
+				desoksivirus.settypekisl(newtypekisl);
+
+				break;
+			}
+			case 5:
+			{
+				desoksivirus.Print();
+				break;
+			}
+			default: return;
+			}
+
+			system("pause");
+			system("cls");
+		}
+	}
