@@ -84,7 +84,7 @@ public:
 	}
 };
 
-int numericNumber();
+int Number();
 string correctString();
 int mainMenu();
 void rybovirus(Rybovirus& rybovirus);
@@ -125,7 +125,7 @@ void desoksivirus(Desoksivirus& desoksivirus);
 		cout << "1.Рибовирус.\n2.Дезоксивирус.\nДругое - выход" << endl;
 		cout << "Введите: ";
 
-		selection = numericNumber();
+		selection = Number();
 		cout << "\n";
 
 		return selection;
@@ -152,7 +152,7 @@ void desoksivirus(Desoksivirus& desoksivirus);
 		return str;
 	}
 
-	int numericNumber()
+	int Number()
 	{
 		int number;
 		cin >> number;
@@ -176,7 +176,7 @@ void desoksivirus(Desoksivirus& desoksivirus);
 			int selection = 0;
 
 			cout << "1.Установить симметрию капсоидов.\n2.Установить наличие оболочки капсидов.\n3.Установить группу.\n4.Установить заболевание.\n5.Вывести информацию.\nДругое - выход" << endl;
-			selection = numericNumber();
+			selection = Number();
 			//cout << "Симметрия капсоидов: " << this->simmkaps << ";\nНаличие оболочки капсидов: " << this->nalob << ";\nГруппа: " << this->gruppa << ";\nЗаболевание: " << this->bolezn
 			switch (selection)
 			{
@@ -221,7 +221,7 @@ void desoksivirus(Desoksivirus& desoksivirus);
 				{
 					trigger = false;
 					cout << "Введите группу: ";
-					newgruppa = numericNumber();
+					newgruppa = Number();
 
 					if ((newgruppa < 1)&&(newgruppa >7))
 					{
@@ -263,7 +263,7 @@ void desoksivirus(Desoksivirus& desoksivirus);
 			int selection = 0;
 
 			cout << "1.Установить симметрию капсоидов.\n2.Установить наличие оболочки капсидов.\n3.Установить количество цепей ДНК.\n4.Установить тип нуклеиновой кислоты.\n5.Вывести информацию.\nДругое - выход" << endl;
-			selection = numericNumber();
+			selection = Number();
 			//оличество цепей ДНК: " << this->kolvocepey << ";\nТип нуклеиновой кислоты: " << this->typekisl << endl;
 		
 			switch (selection)
@@ -309,7 +309,7 @@ void desoksivirus(Desoksivirus& desoksivirus);
 				{
 					trigger = false;
 					cout << "Введите количество цепей ДНК: ";
-					newkolvocepey = numericNumber();
+					newkolvocepey = Number();
 
 					if ((newkolvocepey != 1) && (newkolvocepey !=2))
 					{
