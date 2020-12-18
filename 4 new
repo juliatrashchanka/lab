@@ -1,0 +1,162 @@
+#include <iostream>
+#include <string.h>
+#include <iomanip>
+#include <stdlib.h>
+#include <windows.h>
+
+using namespace std;
+
+class Virus
+{
+
+	string simmkaps;//симметрия капсоидов 
+	string nalob;// наличие оболочки капсидов
+
+public:
+	Virus(string simmkaps = "", string nalob = "");
+	string setSimmkaps();
+	string setNalob();
+
+};
+Virus::Virus(string sim, string nal) // конструктор
+{
+	simmkaps = sim;
+	nalob = nal;
+}
+
+string Virus::setSimmkaps()
+{
+	return simmkaps;
+}
+
+string Virus::setNalob()
+{
+	return nalob;
+}
+
+class Desoksivirus : public Virus
+{
+protected:
+	int kolvocepey;
+	string typekisl;//тип кислоты (dc or cc)
+public:
+	Desoksivirus(string sim = "", string nal = "", int kolvo = 0, string type = "") : Virus(sim, nal)
+	{
+		kolvocepey = kolvo;
+		typekisl = type;
+	}
+	void Print();
+
+};
+void Desoksivirus::Print()
+{
+	cout << "Симметрия капсоидов: " << setSimmkaps() << ";\nНаличие оболочки капсидов: " << setNalob() << ";\nКоличество цепей ДНК: " << kolvocepey << ";\nТип нуклеиновой кислоты: " << typekisl << endl;
+}
+
+class Rybovirus : public Virus
+{
+protected:
+	int gruppa;
+	string bolezn;
+public:
+	Rybovirus(string sim = "", string nal = "", int grup = 0, string bol = "") : Virus(sim, nal)
+	{
+		gruppa = grup;
+		bolezn = bol;
+	}
+	void Print();
+
+};
+void Rybovirus::Print()
+{
+	cout << "Симметрия капсоидов: " << setSimmkaps() << ";\nНаличие оболочки капсидов: " << setNalob() << ";\nГруппа: " << gruppa << ";\nЗаболевание: " << this->bolezn << endl;
+}
+class Unknow : public Virus
+{
+protected:
+	int lifetime;
+	string yearofo;//тип кислоты (dc or cc)
+public:
+	Unknow (string sim = "", string nal = "", int lt = 0, string yofo = "") : Virus(sim, nal)
+	{
+		lifetime = lt;
+		yearofo = yofo;
+	}
+	void Print();
+
+};
+void Unknow::Print()
+{
+	cout << "Симметрия капсоидов: " << setSimmkaps() << ";\nНаличие оболочки капсидов: " << setNalob() << ";\nПродолжительность жизни: " << lifetime << ";\nГод открытия: " << yearofo << endl;
+}
+int main()
+{
+	setlocale(LC_ALL, "ru");
+	int exit = true;
+	while (exit)
+	{
+		int menu;
+		cout << "------------МЕНЮ------------" << endl;
+		cout << "(1) Рибовирус" << endl;
+		cout << "(2) Дезоксивирус" << endl;
+		cout << "(3) Неизвестный" << endl;
+		cout << "(4) Выйти из программы" << endl;
+
+		cout << "Введите: ";
+
+		cin >> menu;
+		system("cls");
+		switch (menu)
+		{
+		case 1:// create auto
+		{
+			int grup;
+		    string sim, nal, bol;
+			cout << "Введите симметрию капсоидов: ";cin >> sim;
+			cout << "Введите наличие оболочки капсидов (отсутствует или имеется): "; cin >> nal;
+			cout << "Введите группу: "; cin >> grup;
+			cout << "Введите заболевание: "; cin >> bol;
+			system("cls");
+			Rybovirus r1(sim, nal, grup, bol);
+			r1.Print();
+			system("pause");
+			system("cls");
+		}; break;
+		case 2:// create phone
+		{
+			int kolvo;
+			string sim, nal, type;
+			cout << "Введите симметрию капсоидов: ";cin >> sim;
+			cout << "Введите наличие оболочки капсидов (отсутствует или имеется): "; cin >> nal;
+			cout << "Введите количество цепей ДНК: "; cin >> kolvo;
+			cout << "Введите тип нуклеиновой кислоты: "; cin >> type;
+			system("cls");
+			Desoksivirus d1(sim, nal, kolvo, type);
+			d1.Print();
+			system("pause");
+			system("cls");
+		}; break;
+		case 3:// create house
+		{
+			int lt;
+			string sim, nal, yofo;
+			cout << "Введите симметрию капсоидов: ";cin >> sim;
+			cout << "Введите наличие оболочки капсидов (отсутствует или имеется): "; cin >> nal;
+			cout << "Укажите продолжительность жизни (в сутках):"; cin >> lt;
+			cout << "Укажите год открытия:"; cin >> yofo;
+			system("cls");
+			Unknow u1(sim, nal, lt, yofo);
+			u1.Print();
+			system("pause");
+			system("cls");
+		}; break;
+		case 4:// exit
+		{
+			exit = false;
+		}; break;
+		default:
+			break;
+		}
+
+	}
+}
