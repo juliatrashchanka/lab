@@ -1,0 +1,1133 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include<iostream>
+#include<fstream>
+#include<locale.h>
+#include <cstdio> 
+#include <iomanip>
+#include <conio.h>
+#include <windows.h>
+using namespace std;
+
+struct delete_user
+{
+	char login[30];
+	char password[30];
+	delete_user* next;
+};
+class autorization {
+	char log[30];
+	char passw[30];
+public:
+	int enter(char* log)
+	{
+		char str[30];
+		autorization buff;
+		int i = 0, n = 0, c;
+		ifstream infile("login.txt");
+
+		while (!infile.eof())
+		{
+			infile >> buff.log;
+			infile >> buff.passw;
+			if (strcmp(log, buff.log) == 0) {
+				n++; break;
+			}
+		}
+		if (n == 0) {
+			cout << "Неправильный логин!" << endl;
+			return 0;
+		}
+		if (n > 0) {
+			cout << "Введите пароль :" << endl;
+			while (1) {
+				str[i] = _getch();
+				if (str[i] == '\r') break;
+				if (str[i] == '\b')
+				{
+					if (i != 0) {
+						printf("\b \b");
+						i--;
+					}
+				}
+				else
+				{
+					if (i < 29) {
+						printf("*");
+						i++;
+					}
+				}
+			}
+			str[i] = '\0';
+			c = i;
+			i = 0;
+			while (i < c)
+			{
+				str[i]++;
+				i++;
+			}
+			cout << endl;
+			if (strcmp(str, buff.passw) == 0) return 1;
+			else {
+				cout << "Неверный пароль!" << endl;
+				return 0;
+			}
+		}
+	}
+	int enter()
+	{
+		autorization buff;
+		char str[30];
+		ifstream infile("login.txt");
+		int  i = 0, c;
+		while (!infile.eof())
+		{
+			infile >> buff.log;
+			infile >> buff.passw;
+			if (strcmp("admin", buff.log) == 0)
+			{
+
+				break;
+			}
+
+		}
+		cout << "Введите пароль : " << endl;
+		while (1) {
+			str[i] = _getch();
+			if (str[i] == '\r') break;
+			if (str[i] == '\b')
+			{
+				if (i != 0) {
+					printf("\b \b");
+					i--;
+				}
+			}
+			else
+			{
+				if (i < 29) {
+
+					printf("*");
+					i++;
+				}
+			}
+		}
+		str[i] = '\0';
+		c = i;
+		i = 0;
+		while (i < c)
+		{
+			str[i]++;
+			i++;
+		}
+		cout << endl;
+		if (strcmp(str, buff.passw) == 0) return 1;
+		else {
+			return 0;
+		}
+	}
+	int registration()
+	{
+		autorization buff;
+		ifstream infile("login.txt");
+		int  i = 0, c;
+		cout << "Введите логин :" << endl;
+		while (1)
+		{
+			int k = 0;
+			cin.getline(log, 20, '\n');
+			for (int i = 0; i < strlen(log); i++)
+			{
+				if ((log[i] >= 'а' && log[i] <= 'я') || (log[i] >= 'А' && log[i] <= 'Я') || (log[i] >= 'a' && log[i] <= 'z') || (log[i] >= 'A' && log[i] <= 'Z'));
+				else k++;
+			}
+			if (k == 0) break;
+			else cout << "Неправильный логин, повторите ввод!" << endl;
+		}
+		while (!infile.eof())
+		{
+			infile >> buff.log;
+			infile >> buff.passw;
+			if (strcmp(log, buff.log) == 0)
+			{
+
+				cout << "Пользователь с таким логином уже зарегистрирован!" << endl;
+				return 0;
+			}
+
+		}
+		cout << "Введите пароль :" << endl;
+		while (1) {
+			passw[i] = _getch();
+			if (passw[i] == '\r') break;
+			if (passw[i] == '\b')
+			{
+				if (i != 0) {
+					printf("\b \b");
+					if (i != 0) i--;
+				}
+			}
+			else
+			{
+				if (i < 29) {
+
+					printf("*");
+					i++;
+				}
+			}
+		}
+		passw[i] = '\0';
+		c = i;
+		i = 0;
+		while (i < c)
+		{
+			passw[i]++;
+			i++;
+		}
+		cout << endl;
+		ofstream outfile("login.txt", ios::app);
+		outfile << log << " " << passw << endl;
+		return 1;
+
+	}
+	void deleteuser(char* log)
+	{
+		autorization buff;
+		int c = 0;
+		delete_user* first = NULL;
+		/*if (strcmp(log, "admin") == 0) { cout << "ПОПЫТКА ВЗЛОМА!\n"; system("pause"); exit(1); }*/
+		ifstream infile("login.txt");
+		while (!infile.eof())
+		{
+			infile >> buff.log;
+			infile >> buff.passw;
+			if (strcmp(buff.log, log) == 0) { c++; continue; }
+			delete_user* newlink = new delete_user;
+			strcpy(newlink->login, buff.log);
+			strcpy(newlink->password, buff.passw);
+			newlink->next = first;
+			first = newlink;
+
+		}
+		ofstream outfile("login.txt", ios::trunc);
+		while (first)
+		{
+			outfile << first->login;
+			outfile << " ";
+			outfile << first->password;
+			outfile << endl;
+			first = first->next;
+
+		}
+		if (c == 0) cout << "Пользователь с таким логином не найден!" << endl;
+		if (c != 0) cout << "Пользователь " << log << " успешно удалён" << endl;
+
+	}
+	void display()
+	{
+		ifstream infile("login.txt");
+		cout << "_________________________" << endl;
+		cout << setw(10) << left << "Логин " << setw(5) << "|" << setw(10) << left << "Пароль" << "|" << endl;
+		cout << "__________|______________|" << endl;
+		while (!infile.eof())
+		{
+			infile >> log;
+			infile >> passw;
+			if (strcmp(log, "admin") == 0) continue;
+			int i = 0;
+			while (passw[i] != '\0')
+			{
+				passw[i]--;
+				i++;
+			}
+			cout << setw(10) << left << log << "|" << setw(14) << left << passw << "|" << endl;
+
+
+		}
+		cout << "__________|______________|" << endl;
+	}
+};
+class train {
+protected:
+	char numtrain[20];
+	int number;
+public:
+	int returnnumber() { return number; }//доступ к этому полю осущ через функцию
+	char* returnkind_of_transport() { return numtrain; }
+	virtual ~train() = 0
+	{
+
+	}
+};
+struct vremya
+{
+	int hours;
+	int minutes;
+};
+class rays : public train
+{
+	char pynkt_otpr[30];
+
+	vremya vremya_otpr;
+	char pynkt_prib[30];
+	int vremya_v_puti;
+public:
+	int returnhours()
+	{
+		return vremya_otpr.hours;
+	}
+	int returnminutes()
+	{
+		return vremya_otpr.minutes;
+	}
+	friend ostream& operator<<(ostream& s, rays& obj)//везде cout<< и выдает с вывод
+	{
+		int sum = 0;
+		s << setw(20) << left << obj.numtrain << setw(20) << left << obj.number << setw(30) << left << obj.pynkt_otpr << setw(2) << left << obj.vremya_otpr.hours << ":" << setw(27) << left << obj.vremya_otpr.minutes << setw(30) << left << obj.pynkt_prib << obj.vremya_v_puti << endl;
+		return s;
+	}
+	friend istream& operator>>(istream& s, rays& obj)
+	{
+		cout << "Введите номер поезда" << endl; strcpy(obj.numtrain, check());
+		cout << "Введите номер рейса " << endl;
+		while (1)
+		{
+			obj.number = checkNum();
+			if (obj.number < 10000 && obj.number > 0) break;
+			else cout << "Неправильный ввод номера, повторите ввод";
+		}
+
+		cout << "Введите пункт отправления" << endl; strcpy(obj.pynkt_otpr, check());
+		cout << "Введите время отправления" << endl;
+		while (1)
+		{
+			cout << "введите часы\n";
+			obj.vremya_otpr.hours = checkNum();
+			if (obj.vremya_otpr.hours >= 24 || obj.vremya_otpr.hours < 0)
+			{
+				cout << "Неверное время!Повторите ввод!!!!!\n";	continue;
+			}
+			cout << "введите минуты\n";
+			obj.vremya_otpr.minutes = checkNum();
+			if (obj.vremya_otpr.minutes >= 60 || obj.vremya_otpr.minutes < 0) {
+				cout << "Неверное время!Повторите ввод!!!!!\n"; continue;
+			}
+			else break;
+		}
+		cout << "Введите пункт прибытия" << endl; strcpy(obj.pynkt_prib, check());
+		cout << "Введите время в пути(в часах)" << endl;
+		while (1)
+		{
+			obj.vremya_v_puti = checkNum();
+			if (obj.vremya_v_puti < 400 && obj.vremya_v_puti > 0) break;
+			else cout << "Неправильный ввод времени, повторите";
+		}
+		return s;
+	}
+	char* returnpynkt_otpr() { return pynkt_otpr; }
+	void write() {//запись в файлы
+		ofstream outfile("file.txt", ios::app);//запись в конец
+		outfile << numtrain << " " << number << " " << " " << pynkt_otpr << " " << vremya_otpr.hours << " " << vremya_otpr.minutes << " " << " " << pynkt_prib << " " << vremya_v_puti << endl;
+	}
+	void read(ifstream& infile)//chtenie iz faila
+	{
+		infile >> numtrain >> number >> pynkt_otpr >> vremya_otpr.hours >> vremya_otpr.minutes >> pynkt_prib >> vremya_v_puti;
+	}
+	static char* check()//провеока ввода букв
+	{
+		char mas[20];
+		bool proverka;
+		while (1)
+		{
+			proverka = true;
+			cin.getline(mas, 20, '\n');
+			for (int i = 0; i < strlen(mas); i++)
+			{
+				if ((mas[i] >= '1' && mas[i] <= '9') || (mas[i] >= 'а' && mas[i] <= 'я') || (mas[i] >= 'А' && mas[i] <= 'Я') || (mas[i] >= 'a' && mas[i] <= 'z') || (mas[i] >= 'A' && mas[i] <= 'Z'));
+				else
+				{
+					proverka = false; //плохо 
+					break;
+				}
+			}
+			if (proverka == true && strlen(mas) > 0)
+				break;
+			else
+			{
+				if (strlen(mas) == 0)
+					system("cls");
+				else
+				{
+					cout << "Введены недопустимые символы, повторите ввод" << endl;
+
+				}
+			}
+		}
+		return mas;
+	}
+
+	int proverka_prav(char vivod[])
+	{
+		char buf[50];
+		int flag, prov, chislo;
+		while (1)
+		{
+			cout << vivod << endl;
+			cin >> buf;
+			prov = 0;
+			for (int i = 0; i < 5; i++)
+			{
+				if (buf[i] == '\0')
+				{
+					break;
+				}
+				if (buf[i] != '1' && buf[i] != '0')
+				{
+					prov = 1;
+				}
+			}
+			if (prov == 0)
+			{
+				chislo = atoi(buf);
+				break;
+			}
+			if (prov == 1) cout << "Это поле может содержать только символы '1' или '0' !" << endl;
+		}
+		return chislo;
+	}
+	static int checkNum() {//проверка цифр
+		char c, str[7];
+		int i = 0;
+		while (1) {
+			c = _getch();
+			if (c == '\r') break;
+			else if (c == '\b')
+			{
+				if (i != 0) {
+					printf("\b \b");
+					i--;
+				}
+			}
+			else if (c >= '0' && c <= '9') {
+
+				if (i < 6) {
+					cout << c;
+					str[i] = c;
+					i++;
+				}
+			}
+
+		}
+		str[i] = '\0';
+		cout << endl;
+		i = atoi(str);
+		return i;
+	}
+
+};
+struct link//cтурктура длястека
+{
+	rays data;
+	link* next;
+};
+class linklist//стек
+{
+protected:
+	link* first;//указатель на начало стека
+public:
+	linklist() { first = NULL; }//конструктор указатель на 0
+
+
+	void additem(rays obj)//добавление объекта
+	{
+		if (obj.returnkind_of_transport()[0] == '\0') return;
+		link* current = first;
+		while (current)
+		{
+			if (current->data.returnnumber() == obj.returnnumber()) { cout << "Транспорт с таким номером уже имеется" << endl; system("pause"); return; }
+			current = current->next;
+		}
+		link* newlink = new link;//создание обхекта динамисческое
+		newlink->data = obj;
+		newlink->next = first;
+		first = newlink;
+	}
+	void display()//setw - размер поля 
+	{
+		link* current = first;
+		cout << "____________________________________________________________________________________________________________________________________________________" << endl;
+		cout << setw(20) << left << "Поезд" << setw(20) << left << "Рейс" << setw(30) << left << "Пункт отправления" << setw(30) << left << "Время отправления" << setw(30) << left << "Конечный пункт" << setw(30) << left << "Время в пути" << endl;
+		cout << "____________________________________________________________________________________________________________________________________________________" << endl;
+		while (current)
+		{
+			cout << current->data << endl;
+			current = current->next;
+		}
+	}
+	int deleteitem(int deletesurname)//удаление 
+	{
+		link* prev = NULL;
+		link* current = first;
+		int k = 0;
+		do
+		{
+
+			if (current->data.returnnumber() == deletesurname) {
+				k++;
+				if (prev != NULL) prev->next = current->next;
+				if (prev == NULL) first = current->next;
+				delete current;
+				return k;
+				break;
+			}
+			prev = current;
+			current = current->next;
+		} while (current);//сравнивает каждый номер
+		return k;
+	}
+	void renameitem(int deletesurname)
+	{
+		link* current = first;
+		char c;
+		rays buff;
+		int k = 0;
+		while (current)
+		{
+
+			if (current->data.returnnumber() == deletesurname) {
+				k++;
+				cout << "Введите новые данные" << endl;
+				cin >> buff;
+				system("cls");
+				cout << "Данные до изменения" << endl;
+				cout << current->data << endl;
+				cout << "Данные после изменния" << endl;
+				cout << buff << endl;
+				cout << "Потвердить изменения?(1/0)";
+				c = _getch();
+				if (c == '1') current->data = buff;
+				return;
+			}
+			current = current->next;
+		}
+		if (k == 0) cout << "Рейса с таким номером не найдено" << endl;
+	}
+	void createlist()//СОЗДАНИЕ списка из файла
+	{
+		rays buff;
+		ifstream infile("file.txt");
+		while (!infile.eof())
+		{
+
+			buff.read(infile);
+			this->additem(buff);
+		}
+
+	}
+	void savelist()//сохранение в файл
+	{
+		FILE* fp;
+		fp = fopen("file.txt", "w");
+		fclose(fp);
+		link* current = first;
+		while (current)
+		{
+			current->data.write();
+			current = current->next;
+		}
+	}
+	linklist sort_kind()
+	{
+		linklist buf_list;
+		char max[30];
+		link* save;
+		link* current = first->next;
+		while (current) {
+
+			strcpy(max, first->data.returnkind_of_transport());
+			save = first;
+			while (current)
+			{
+				if (strcmp(current->data.returnkind_of_transport(), max) > 0)
+				{
+					strcpy(max, current->data.returnkind_of_transport());
+					save = current;
+				}
+				current = current->next;
+			}
+			buf_list.additem(save->data);
+			this->deleteitem(save->data.returnnumber());
+			current = first;
+		}
+
+		return buf_list;
+	}
+	linklist sort_number()//сортировка по номеру
+	{
+		linklist buf_list;
+		float max;
+		link* save;
+		link* current = first;
+		while (current) {
+
+			max = current->data.returnnumber();
+			save = first;
+			while (current)
+			{
+				if (current->data.returnnumber() > max)
+				{
+					max = current->data.returnnumber();
+					save = current;
+				}
+				current = current->next;
+			}
+			buf_list.additem(save->data);
+			this->deleteitem(save->data.returnnumber());
+			current = first;
+		}
+		return buf_list;
+	}
+	void stats(int hours, int minutes)
+	{
+		int tekush_hour, tekush_minute;
+		link* current = first;
+		while (current)
+		{
+			tekush_hour = current->data.returnhours();
+			tekush_minute = current->data.returnminutes();
+			tekush_minute = tekush_minute + current->data.returnminutes();
+			if (tekush_minute >= 60) {
+				tekush_hour++;
+				if (tekush_hour >= 24) tekush_hour = tekush_hour - 24;
+				tekush_minute = tekush_minute - 60;
+			}
+			if (tekush_hour < hours) {
+				cout << "Посадка на рейс с номером " << current->data.returnnumber() << " окончена" << endl; current = current->next; continue;
+			}
+			if (tekush_hour == hours && tekush_minute <= minutes) {
+				cout << "Посадка на рейс с номером  " << current->data.returnnumber() << " окончена" << endl; current = current->next; continue;
+			}
+			else { cout << "Посадка на рейс с номером  " << current->data.returnnumber() << " осуществляется" << endl; current = current->next; continue; }
+		}
+
+	}
+	void poisk_pynkt_otpr(char* deletesurname)//делет сурнам любое
+	{
+		int k = 0;
+		link* current = first;
+		while (current)
+		{
+
+			if (_strnicmp(current->data.returnpynkt_otpr(), deletesurname, strlen(deletesurname)) == 0) {
+
+				k++;
+			}
+			current = current->next;
+		}
+		if (k != 0) {
+			link* current = first;
+			cout << "____________________________________________________________________________________________________________________________________________________" << endl;
+			cout << setw(20) << left << "Поезд" << setw(20) << left << "Номер рейса" << setw(30) << left << "Пункт отправления" << setw(30) << left << "Время отправления" << setw(30) << left << "Пункт прибытия" << setw(30) << left << "Время в пути" << endl;
+			cout << "____________________________________________________________________________________________________________________________________________________" << endl;
+			while (current)
+			{
+
+				if (_strnicmp(current->data.returnpynkt_otpr(), deletesurname, strlen(deletesurname)) == 0) {
+
+					cout << current->data << endl;
+				}
+				current = current->next;
+			}
+		}
+		if (k == 0) cout << "Пункта отправления не найдено" << endl;
+	}
+	template<class T>
+	void poisk_number(T number)
+	{
+		int k = 0;
+		link* current = first;
+		while (current)
+		{
+
+			if (current->data.returnnumber() == number) {
+
+				k++;
+			}
+			current = current->next;
+		}
+		if (k != 0) {
+			link* current = first;
+			cout << "____________________________________________________________________________________________________________________________________________________" << endl;
+			cout << setw(20) << left << "Поезд" << setw(20) << left << "Номер рейса" << setw(30) << left << "Пункт отправления" << setw(30) << left << "Время отправления" << setw(30) << left << "Пункт прибытия" << setw(30) << left << "Время полета" << endl;
+			cout << "____________________________________________________________________________________________________________________________________________________" << endl;
+			while (current)
+			{
+
+				if (current->data.returnnumber() == number) {
+
+					cout << current->data << endl;
+				}
+				current = current->next;
+			}
+		}
+		if (k == 0) cout << "Рейса с таким номером не найдено" << endl;
+	}
+	/*void stats()
+	{
+
+	}*/
+};
+
+class MENU : public linklist
+{
+
+public:
+	static char* check()
+	{
+		char mas[20];
+		bool proverka;
+		while (1)
+		{
+			proverka = true;
+			cin.getline(mas, 20, '\n');
+			fflush(stdin);
+			for (int i = 0; i < strlen(mas); i++)
+			{
+				if ((mas[i] >= 'а' && mas[i] <= 'я') || (mas[i] >= 'А' && mas[i] <= 'Я') || (mas[i] >= 'a' && mas[i] <= 'z') || (mas[i] >= 'A' && mas[i] <= 'Z'));
+				else
+				{
+					proverka = false; //плохо 
+					break;
+				}
+			}
+			if (proverka == true && strlen(mas) > 0)
+				break;
+			else
+			{
+				if (strlen(mas) == 0)
+					system("cls");
+				else
+				{
+					cout << "Введены недопустимые символы, повторите ввод" << endl;
+
+				}
+			}
+		}
+		return mas;
+	}
+
+
+
+	static int checkNum() {
+		char c, str[7];
+		int i = 0;
+		while (1) {
+			c = _getch();
+			if (c == '\r') break;
+			else if (c == '\b')
+			{
+				if (i != 0) {
+					printf("\b \b");
+					i--;
+				}
+			}
+			else if (c >= '0' && c <= '9') {
+
+				if (i < 6) {
+					cout << c;
+					str[i] = c;
+					i++;
+				}
+			}
+
+		}
+		str[i] = '\0';
+		cout << endl;
+		i = atoi(str);
+		return i;
+	}
+
+
+
+	linklist menu_admin(linklist list) // Если нажали Enter
+	{
+		rays buff;
+		autorization redakt;
+		char deletesurname[30];
+		int keks;
+		char x;
+		cout << setw(20) << right << "ГЛАВНОЕ МЕНЮ АДМИНИСТРАТОРА\n";
+		cout << "1.Вывод информации о рейсах.\n2.Добавление нового рейса.\n3.Удаление рейса.\n4.Редактирование.\n5.Сортировка.\n6.Поиск.\n7.Работа с пользователями.\n8.Вывод информации о посадках на рейсы.\n9.Выход в главное меню.\n";//endl
+		x = _getche();
+		switch (x)
+		{
+		case '1': { system("cls"); list.display();  system("pause"); return list;
+			system("cls"); break;
+
+		}
+		case '2': {system("cls");
+			cin >> buff;
+			list.additem(buff);
+			return list;
+			break;
+
+		}
+		case '3': { system("cls");
+			int c;
+			cout << "Введите номер удаляемого рейса :" << endl;
+			keks = checkNum();
+			c = list.deleteitem(keks);
+			if (c != 0) cout << "Рейс с таким номером успешно удален из списка!" << endl;
+			if (c == 0) cout << "Рейса с таким номером не найдено!" << endl;
+			system("pause");
+			system("cls");
+			return list;
+			break;
+
+		}
+		case '4': { system("cls");
+			list.display();
+			cout << "Введите номер редактируемого рейса :" << endl;
+			keks = checkNum();
+			list.renameitem(keks);
+			system("pause");
+			system("cls");
+			return list;
+			break;
+
+		}
+		case '5': {
+			list = menu_sort(list);
+			system("cls");
+			return list;
+			break; }
+		case '6': {
+
+			menu_search(list);
+			system("cls");
+			return list;
+			break; }
+
+				//}
+
+		case'7': {
+
+			menu_work_user(list);
+			system("cls");
+			return list;
+			break; }
+		case '8': {  int a, b;
+			system("cls");
+			cout << "Введите часы:\n";
+			cin >> a;
+			cout << endl;
+			cout << "Введите минуты:\n";
+			cin >> b;
+			cout << endl;
+			list.stats(a, b);
+			system("pause");
+			system("cls");
+			return list;
+			break;
+		}
+		case '9': { system("cls");  list.savelist();
+			return menu_main(list);
+		}
+		default: system("cls");
+			cout << "НЕПРАВИЛЬНЫЙ ВВОД, ПОВТОРИТЕ!\n";
+			system("pause");
+			system("cls");
+			return menu_admin(list);
+			break;
+		}
+	}
+
+	linklist menu_main(linklist list) // Если нажали Enter
+	{
+		int i = 0, keks;
+		char c;
+		autorization buff;
+		char deletesurname[30];
+		char x;
+		cout << setw(20) << right << "ГЛАВНОЕ МЕНЮ\n";
+		cout << "1.Вход пользователя.\n2.Вход администратора.\n3.Регистрация нового пользователя.\n4.Выход из программы.\n";//endl
+
+		x = _getche();
+		switch (x)
+		{
+		case '1': { system("cls");
+			while (!i) {
+				cout << "Введите логин :" << endl;
+				strcpy(deletesurname, check());
+				fflush(stdin);
+				i = buff.enter(deletesurname);
+				if (i == 0)
+				{
+					cout << "Повторить ввод?(1/0)" << endl;
+					c = _getch();
+					if (c == '1') {
+						i = 0;
+					}
+					else if (c == '0') i = 2;
+					else i = 2;
+				}
+			}
+			if (i == 2) { system("cls"); menu_main(list); }
+			while (1) { system("cls"); list = menu_user(list); }
+			system("pause");
+			system("cls");
+			break;
+
+		}
+		case '2': {  system("cls");
+			while (!i) {
+				i = buff.enter();
+				if (i == 0)
+				{
+					cout << "Неверный пароль!" << endl;
+
+					cout << "Повторить ввод?(1/0)" << endl;
+					c = _getch();
+					if (c == '1') i = 0;
+					else if (c == '0') i = 2;
+					else  i = 0;/*
+								continue;*/
+
+								/*system("pause");
+								i = 0;*/
+				}
+			}
+			if (i == 2) { system("cls"); menu_main(list); }
+			while (1) { system("cls"); list = menu_admin(list); }
+			system("pause");
+			system("cls");
+			break;
+		}
+		case '3': { system("cls");
+			buff.registration();
+			system("pause");
+			system("cls");
+			return menu_main(list);
+			break;
+		}
+		case'4': {
+			cout << "\n";
+			cout << "С НОВЫМ ГОДОМ!\n";
+			exit(1); }
+		default:
+			system("cls");
+			cout << "НЕПРАВИЛЬНЫЙ ВВОД, ПОВТОРИТЕ!\n";
+			system("pause");
+			system("cls");
+			return menu_main(list);
+			break;
+
+		}
+
+	}
+
+	linklist menu_work_user(linklist list)
+	{
+		autorization redakt;
+		autorization buff;
+		int a = 0;
+		int i;
+		char c;
+		char deletesurname[30];
+		char x;
+		system("cls");
+		cout << setw(20) << right << "МЕНЮ УПРАВЛЕНИЯ ПОЛЬЗОВАТЕЛЯМИ\n";
+		cout << "1.Добавление нового пользователя.\n2.Удаление пользователя.\n3.Список пользователей.\n4.Выход.\n" << endl;
+		x = _getche();
+		switch (x)
+		{
+		case '1':
+		{ system("cls");
+		buff.registration();
+		system("pause");
+		system("cls");
+		return list = menu_work_user(list);
+		break;
+		}
+		case'2': { system("cls");
+			cout << "Введите логин удаляемого пользователя :" << endl;
+			strcpy(deletesurname, check());
+			redakt.deleteuser(deletesurname);
+			system("pause");
+			system("cls");
+			return list = menu_work_user(list);
+			break;
+		}
+		case'3': {  system("cls");//
+			redakt.display();
+			system("pause");
+			system("cls");
+			return list = menu_work_user(list);
+			break;
+		}
+		case'4': { system("cls");
+			return list = menu_admin(list);
+			break;
+		}
+		default:
+			system("cls");
+			cout << "НЕПРАВИЛЬНЫЙ ВВОД, ПОВТОРИТЕ!\n";
+			system("pause");
+			system("cls");
+			return menu_work_user(list);
+			break;
+
+		}
+	}
+	//
+	///////////////////////////////////////////////////////////////////////////
+	void menu_search(linklist list) // Если нажали Enter
+	{
+		int i;
+		char deletesurname[20];
+		char x;
+		system("cls");
+		cout << setw(20) << right << "МЕНЮ ПОИСКА\n";//endl
+		cout << "1.Поиск по пункту отправления.\n2.Поиск по номеру.\n3.Выход из меню поиска.\n\n";//endl
+		list.display();
+		x = _getche();
+		switch (x)
+		{
+		case '1': { system("cls");
+			cout << "Введите искомый пункт отправления :" << endl;
+			strcpy(deletesurname, check());
+			list.poisk_pynkt_otpr(deletesurname);
+			system("pause");
+			system("cls");
+			break;
+
+		}
+		case '2': {  system("cls");
+			cout << "Введите номер искомого рейса :" << endl;
+			i = checkNum();
+			list.poisk_number(i);
+			system("pause");
+			system("cls");
+			break;
+		}
+		case'3': {
+			system("cls");
+			return;
+		}
+		default:
+			system("cls");
+			cout << "НЕПРАВИЛЬНЫЙ ВВОД, ПОВТОРИТЕ!\n";
+			system("pause");
+			system("cls");
+			return menu_search(list);
+			break;
+		}
+
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	linklist menu_sort(linklist list) // Если нажали Enter
+	{
+		char x;
+		system("cls");
+		cout << setw(20) << right << "МЕНЮ СОРТИРОВКИ\n";
+		cout << "1.Сортировка по номеру поезда.\n2.Сортировка по номеру рейса.\n3.Выход из меню сортировки.";//endl
+		x = _getche();
+		switch (x)
+		{
+		case '1': { system("cls");
+			list = list.sort_kind();
+			cout << setw(70) << right << "Список успешно отсортирован по номеру поезда\n\n";
+			list.display();  system("pause");
+			return list;
+			system("cls");
+			break;
+
+		}
+		case '2': {  system("cls");
+			list = list.sort_number();
+			cout << setw(70) << right << "Список успешно отсортирован по номеру рейса\n\n";
+			list.display();  system("pause");
+			return list;
+			system("cls");
+			break;
+		}
+		case'3': {
+			system("cls");
+			return list; }
+		default:
+			system("cls");
+			cout << "НЕПРАВИЛЬНЫЙ ВВОД, ПОВТОРИТЕ!\n";
+			system("pause");
+			system("cls");
+			return menu_sort(list);
+			break;
+		}
+
+	}
+	//
+	////////////////////////////////////////////////////////////////////////////
+	linklist menu_user(linklist list) // Если нажали Enter
+	{
+		char x;
+		cout << setw(20) << right << "ГЛАВНОЕ МЕНЮ ПОЛЬЗОВАТЕЛЯ\n";
+		cout << "1.вывод информации о рейсах.\n2.Сортировка.\n3.Поиск.\n4.Вывод информации о посадках.\n5.Выход в главное меню.\n";//endl
+		x = _getche();
+		switch (x)
+		{
+		case '1': {system("cls"); list.display();  system("pause"); return list;
+			system("cls"); break;
+		}
+		case '2': { list = menu_sort(list);
+			system("cls");
+			return list;
+			break;
+		}
+		case '3': { menu_search(list);
+			system("cls");
+			return list;
+			break;
+		}
+		case '4': {
+			int a, b;
+			system("cls");
+			cout << "Введите часы:\n";
+			cin >> a;
+			cout << endl;
+			cout << "Введите минуты:\n";
+			cin >> b;
+			cout << endl;
+
+			list.stats(a, b);
+			system("pause");
+			system("cls");
+			return list;
+			break;
+		}
+		case '5': { system("cls");
+			return  menu_main(list);
+			break;
+		}
+
+		default:
+			system("cls");
+			cout << "НЕПРАВИЛЬНЫЙ ВВОД, ПОВТОРИТЕ!\n";
+			system("pause");
+			system("cls");
+			return menu_user(list);
+			break;
+		}
+
+	}
+};
+
+int main()
+{
+	SetConsoleOutputCP(1251);
+	SetConsoleCP(1251);
+	setlocale(LC_ALL, "rus");
+	linklist list;
+	MENU ts;
+	list.createlist();
+	ts.menu_main(list);
+	system("pause");
+	return 0;
+}
