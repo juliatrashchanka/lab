@@ -1,0 +1,158 @@
+#include<iostream>
+#include<iomanip>
+#include<string>
+#include <string.h>
+#include <stdlib.h>
+#include <windows.h>
+using namespace std;
+
+class Virus  // абстрактный базовый класс
+{
+public:
+    virtual void print() = 0;   // печать названия 	
+};
+
+class OneVirus : public Virus 	   // абстрактный производный класс
+{
+protected:
+    string simmkaps;//симметрия капсоидов 
+    string nalob;
+public:
+    OneVirus(string sim, string nal) // конструктор с параметрами
+    {
+        simmkaps = sim;
+        nalob = nal;
+    }
+    virtual void print() = 0;
+};
+
+
+class Desoksivirus : public OneVirus
+{
+protected:
+    int kolvocepey;
+    string typekisl;
+public:
+    Desoksivirus(int kolvo, string type, string sim, string nal) : OneVirus(sim, nal)
+    {
+         kolvocepey = kolvo;
+         typekisl = type;
+    }
+    void Print()
+    {
+        cout << "Симметрия капсоидов: " << simmkaps << ";\nНаличие оболочки капсидов: " << nalob << ";\nКоличество цепей ДНК: " << kolvocepey << ";\nТип нуклеиновой кислоты: " << typekisl << endl;
+    }
+};
+class Rybovirus : public OneVirus
+{
+protected:
+    int gruppa;
+    string bolezn;
+public:
+    Rybovirus(int grup, string bol, string sim, string nal) : OneVirus(sim, nal)
+    {
+         gruppa = grup;
+        bolezn = bol;
+    }
+    void Print()
+    {
+        cout << "Симметрия капсоидов: " << simmkaps << ";\nНаличие оболочки капсидов: " << nalob << ";\nГруппа: " << gruppa << ";\nЗаболевание: " << bolezn << endl;
+    }
+};
+
+class Unknow :public OneVirus
+{
+protected:
+    int lifetime;
+    string yearofo;
+public:
+    Unknow(int lt, string yofo, string sim, string nal) : OneVirus(sim, nal)
+    {
+         lifetime = lt;
+         yearofo= yofo;
+    }
+    void Print()
+    {
+        cout << "Симметрия капсоидов: " << simmkaps << ";\nНаличие оболочки капсидов: " << nalob << ";\nПродолжительность жизни: " << lifetime << ";\nГод открытия: " << yearofo << endl;
+    }
+
+};
+string correctString()
+{
+    bool tr;
+    string str;
+    do
+    {
+        tr = false;
+        cin >> str;
+        for (int i = 0; i < str.length(); i++)
+        {
+            if ((str[i] < 'А' || str[i] > 'я'))//&&(str[i] < 'а' && str[i] > 'я'))
+            {
+                tr = true;
+                cout << "Некорректный ввод строки!\nПопробуйте снова: ";
+                cout << str;
+                break;
+            }
+        }
+    } while (tr);
+
+    return str;
+}
+
+int Number()
+{
+    int number;
+    cin >> number;
+
+    while (cin.get() != '\n')
+    {
+        cout << "Некорректный ввод!" << endl;
+        cout << "Введите снова: ";
+        cin.clear();
+        cin.ignore(256, '\n');
+        cin >> number;
+    }
+
+    return number;
+}
+
+int main()
+{
+    setlocale(LC_ALL, "Russian");
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    int lt, kolvo, grup;
+    string type,yofo, sim, nal,bol;
+    Virus* ptr[3];
+   
+    cout << "Введите симметрию капсоидов: "; sim = correctString();
+    cout << "Введите наличие оболочки капсидов (отсутствует или имеется): ";  nal = correctString();
+    cout << "Введите группу: "; grup = Number();;
+    cout << "Введите заболевание: "; bol = correctString();
+    cout << "--------------------------" << endl;
+    Rybovirus r(grup, bol, sim, nal);
+   
+    cout << "Введите симметрию капсоидов: "; sim = correctString();
+    cout << "Введите наличие оболочки капсидов (отсутствует или имеется): ";  nal = correctString();
+    cout << "Введите количество цепей ДНК: ";  kolvo = Number();
+    cout << "Введите тип нуклеиновой кислоты: "; type = correctString();
+    cout << "--------------------------" << endl;
+    Desoksivirus d(kolvo,  type,  sim,  nal);
+
+    cout << "Введите симметрию капсоидов: "; sim = correctString();
+    cout << "Введите наличие оболочки капсидов (отсутствует или имеется): ";  nal = correctString();
+    cout << "Укажите продолжительность жизни (в сутках):";  lt = Number();
+    cout << "Укажите год открытия:";  yofo = correctString();
+    cout << "--------------------------" << endl;
+    Unknow u(lt,yofo, sim, nal);
+    ptr[0] = &d;
+    ptr[1] = &r; // инициализация массива указателей ptr
+    ptr[2] = &u;
+    for (int i = 0; i < 3; i++)
+    {
+        ptr[i]->print();
+        cout << "--------------------------" << endl;
+    }
+    return 0;
+}
