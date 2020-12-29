@@ -69,7 +69,7 @@ public:
 };
 void Rybovirus::Print()
 {
-	cout << "Симметрия капсоидов: " << setSimmkaps() << ";\nНаличие оболочки капсидов: " << setNalob() << ";\nГруппа: " << gruppa << ";\nЗаболевание: " << this->bolezn << endl;
+	cout << "Симметрия капсоидов: " << setSimmkaps() << ";\nНаличие оболочки капсидов: " << setNalob() << ";\nГруппа: " << gruppa << ";\nЗаболевание: " << bolezn << endl;
 }
 class Unknow : public Virus
 {
@@ -89,9 +89,52 @@ void Unknow::Print()
 {
 	cout << "Симметрия капсоидов: " << setSimmkaps() << ";\nНаличие оболочки капсидов: " << setNalob() << ";\nПродолжительность жизни: " << lifetime << ";\nГод открытия: " << yearofo << endl;
 }
+
+string correctString()
+{
+	bool tr;
+	string str;
+	do
+	{
+		tr = false;
+		cin >> str;
+		for (int i = 0; i < str.length(); i++)
+		{
+			if ((str[i] < 'А' || str[i] > 'я') )//&&(str[i] < 'а' && str[i] > 'я'))
+			{
+				tr = true;
+				cout << "Некорректный ввод строки!\nПопробуйте снова: ";
+				cout << str;
+				break;
+			}
+		}
+	} while (tr);
+
+	return str;
+}
+
+int Number()
+{
+	int number;
+	cin >> number;
+
+	while (cin.get() != '\n')
+	{
+		cout << "Некорректный ввод!" << endl;
+		cout << "Введите снова: ";
+		cin.clear();
+		cin.ignore(256, '\n');
+		cin >> number;
+	}
+
+	return number;
+}
+
 int main()
 {
-	setlocale(LC_ALL, "ru");
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+	setlocale(LC_ALL, "rus");
 	int exit = true;
 	while (exit)
 	{
@@ -103,47 +146,47 @@ int main()
 		cout << "(4) Выйти из программы" << endl;
 
 		cout << "Введите: ";
-
-		cin >> menu;
+		menu = Number();
+		//cin >> menu;
 		system("cls");
 		switch (menu)
 		{
-		case 1:// create auto
+		case 1:
 		{
 			int grup;
 		    string sim, nal, bol;
-			cout << "Введите симметрию капсоидов: ";cin >> sim;
-			cout << "Введите наличие оболочки капсидов (отсутствует или имеется): "; cin >> nal;
-			cout << "Введите группу: "; cin >> grup;
-			cout << "Введите заболевание: "; cin >> bol;
+			cout << "Введите симметрию капсоидов: "; sim= correctString();
+			cout << "Введите наличие оболочки капсидов (отсутствует или имеется): ";  nal= correctString();
+			cout << "Введите группу: "; grup = Number();;
+			cout << "Введите заболевание: "; bol= correctString();
 			system("cls");
 			Rybovirus r1(sim, nal, grup, bol);
 			r1.Print();
 			system("pause");
 			system("cls");
 		}; break;
-		case 2:// create phone
+		case 2:
 		{
 			int kolvo;
-			string sim, nal, type;
-			cout << "Введите симметрию капсоидов: ";cin >> sim;
-			cout << "Введите наличие оболочки капсидов (отсутствует или имеется): "; cin >> nal;
-			cout << "Введите количество цепей ДНК: "; cin >> kolvo;
-			cout << "Введите тип нуклеиновой кислоты: "; cin >> type;
+			string sim, nal, type;	
+			cout << "Введите симметрию капсоидов: "; sim = correctString();
+			cout << "Введите наличие оболочки капсидов (отсутствует или имеется): ";  nal = correctString();
+			cout << "Введите количество цепей ДНК: ";  kolvo= Number();
+			cout << "Введите тип нуклеиновой кислоты: "; type = correctString();
 			system("cls");
 			Desoksivirus d1(sim, nal, kolvo, type);
 			d1.Print();
 			system("pause");
 			system("cls");
 		}; break;
-		case 3:// create house
+		case 3:
 		{
 			int lt;
 			string sim, nal, yofo;
-			cout << "Введите симметрию капсоидов: ";cin >> sim;
-			cout << "Введите наличие оболочки капсидов (отсутствует или имеется): "; cin >> nal;
-			cout << "Укажите продолжительность жизни (в сутках):"; cin >> lt;
-			cout << "Укажите год открытия:"; cin >> yofo;
+			cout << "Введите симметрию капсоидов: "; sim = correctString();
+			cout << "Введите наличие оболочки капсидов (отсутствует или имеется): ";  nal = correctString();
+			cout << "Укажите продолжительность жизни (в сутках):";  lt= Number();
+			cout << "Укажите год открытия:";  yofo = correctString();
 			system("cls");
 			Unknow u1(sim, nal, lt, yofo);
 			u1.Print();
@@ -160,3 +203,4 @@ int main()
 
 	}
 }
+
