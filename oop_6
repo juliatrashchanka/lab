@@ -1,0 +1,283 @@
+#include <iostream>
+#include <string>
+#include <Windows.h>
+#include <fstream>
+#include <conio.h>
+#include <iomanip>
+
+using namespace std;
+
+int  Menu();
+string writeWords();
+double writeNumbers();
+
+class Virus {
+protected:
+	string simmkaps;//симметрия капсоидов 
+	string nalob;// наличие оболочки капсидов
+public:
+	Virus()
+	{};
+	  Virus(string sim, string nal) {
+		simmkaps = sim;
+		nalob = nal;
+	}
+	void printInf()
+	{
+		cout << "симметрия капсоидов: " << simmkaps << endl;
+		cout << "наличие оболочки капсидов: " << nalob << endl;
+	}
+
+	~Virus();
+};
+
+class Desoksivirus :virtual public Virus {
+protected:
+
+	int kolvocepey;
+	string typekisl;//тип кислоты (dc or cc)
+
+public:
+	Desoksivirus(string sim, string nal, int kolvo, string type) :Virus(sim, nal)
+	{
+
+		kolvocepey = kolvo;
+		typekisl = type;
+	}
+	Desoksivirus()
+	{
+		kolvocepey = 0;
+		//typekisl = "";
+	};
+	void printInf()
+	{
+		
+		cout << "Количество цепей ДНК: " << kolvocepey << endl;
+		cout << "Тип нуклеиновой кислоты: " << typekisl << endl;
+	}
+
+	~Desoksivirus();
+};
+
+class Rybovirus:virtual public Virus {
+protected:
+	int gruppa;
+	string bolezn;
+
+public:
+	Rybovirus()
+	{
+		gruppa = 0;
+	};
+	Rybovirus(string sim, string nal, int grup, string bol) :Virus(sim, nal)
+	{
+		gruppa = grup;
+		bolezn = bol;
+	}
+	void printInf()
+	{
+		cout << "Группа: " << gruppa << endl;
+		cout << "Заболевание: " << bolezn << endl;
+		
+	}
+
+	~Rybovirus();
+};
+
+class Unknow :public Desoksivirus, public Rybovirus {
+private:
+	int lifetime;
+	string yearofo;
+
+public:
+	Unknow()
+	{
+		lifetime = 0;
+	};
+	Unknow(string sim, string nal, int kolvo, string type, int grup, string bol, string yofo, int lt):Desoksivirus(sim,  nal,  kolvo,  type), Rybovirus(sim, nal, grup, bol), Virus(sim, nal)
+	{
+		lifetime = lt;
+		yearofo = yofo;
+	}
+	void printWorkInf()
+	{
+		//cout << "Âñå äàííûå:" << endl;
+		Rybovirus::printInf();
+		cout << "Продолжительность жизни: " << lifetime << endl;
+		Virus::printInf();
+		Desoksivirus::printInf();
+		cout << "Год открытия: " << yearofo << endl;
+	}
+
+	~Unknow();
+};
+Virus::~Virus()
+{
+
+}
+Desoksivirus::~Desoksivirus()
+{
+
+}
+Rybovirus::~Rybovirus()
+{
+
+}
+Unknow::~Unknow()
+{
+
+}
+
+int Menu() {
+	int choose_menu = 0, keyboard_button = 0;
+	while (true) {
+
+		choose_menu = (choose_menu + 3) % 3;
+
+		if (choose_menu == 0) { cout << " -> Ввести информацию" << endl; }
+		else { cout << " Ввести информацию" << endl; }
+
+		if (choose_menu == 1) { cout << " -> Вывести информацию" << endl; }
+		else { cout << " Вывести информацию" << endl; }
+
+		if (choose_menu == 2) { cout << " -> Выход" << endl; }
+		else { cout << " Выход" << endl; }
+
+
+
+		keyboard_button = _getch();
+		if (keyboard_button == 224) {
+			keyboard_button = _getch();
+			if (keyboard_button == 72) choose_menu--;
+			if (keyboard_button == 80) choose_menu++;
+		}
+		if (keyboard_button == 13) { system("cls"); return choose_menu; }
+		system("cls");
+	}
+}
+
+int main() {
+	setlocale(0, "rus");
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+	string sim, nal, bol, type, yofo;
+	int grup, kolvo,lt, n = 0;
+	double rt;
+	Unknow* mas = new Unknow[n];
+	while (true) {
+		int choose = Menu();
+		if (choose == 0)
+		{
+			cout << "Продолжительность жизни: ";
+			lt = writeNumbers();
+			cout << endl;
+			cout << "Год открытия: ";
+			yofo = writeNumbers();
+			cout << endl;
+			cout << "Группа: ";
+			grup = writeNumbers();
+			cout << endl;
+			cout << "Заболевание: ";
+			bol = writeWords();
+			cout << endl;
+			cout << "Cимметрия капсоидов : ";
+			sim = writeWords();
+			cout << endl;
+			cout << "Наличие оболочки капсидов: ";
+			nal = writeWords();
+			cout << endl;
+			cout << "Количество цепей ДНК: ";
+			kolvo = writeNumbers();
+			cout << endl;
+			cout << "Тип нуклеиновой кислоты: ";
+			type = writeWords();
+			cout << endl;
+			
+			Unknow un(sim, nal, kolvo,  type,  grup,  bol, yofo,  lt);
+			Unknow* mas1 = new Unknow[n + 1];
+			copy(mas, mas + n, mas1);
+			mas1[n] = un;
+			n++;
+			delete[]mas;
+			mas = mas1;
+		}
+		else
+			if (choose == 1)
+			{
+				if (n == 0)
+				{
+					cout << "Данные отсутствуют" << endl;
+				}
+				else {
+					for (int i = 0; i < n; i++) {
+
+						mas[i].printWorkInf();
+					}
+
+
+				}
+
+			}
+			else break;
+	}
+	delete[]mas;
+	return 0;
+}
+
+string writeWords()
+{
+	string slovo;
+	while (true) {
+		int Knopka;
+		char sumbol;
+		Knopka = _getch();
+		if (Knopka == 224) {
+			Knopka = _getch();
+		}
+		else
+			if (Knopka == 8) {
+				if (slovo.length() != 0) {
+					cout << '\b' << " " << '\b';
+					slovo.erase(slovo.length() - 1);
+				}
+			}
+			else
+				if (Knopka == 13) {
+					break;
+				}
+				else {
+					sumbol = (char)Knopka;
+					if ((sumbol >= 'a' && sumbol <= 'z') || (sumbol >= 'A' && sumbol <= 'Z') || (sumbol >= 'à' && sumbol <= 'ÿ') || (sumbol >= 'À' && sumbol <= 'ß') || sumbol == ' ' || sumbol == '+') {
+						slovo = slovo + sumbol;
+						cout << sumbol;
+					}
+				}
+	}
+	return slovo;
+}
+
+double writeNumbers() {
+	string numbers;
+	while (true) {
+		double key;
+		key = _getch();
+		if (key == 224) {
+			key = _getch();
+		}
+		else
+			if (key == 8) {
+				if (numbers.length() != 0) {
+					cout << '\b' << " " << '\b';
+					numbers.erase(numbers.length() - 1);
+				}
+			}
+			else
+				if (key == 13) break;
+				else
+					if (key >= '0' && key <= '9' || key == ',') {
+						numbers = numbers + (char)key;
+						cout << (char)key;
+					}
+	}
+	return stod(numbers);
+}
