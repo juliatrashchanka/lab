@@ -57,9 +57,9 @@ class Unknow :public Virus
 {
 protected:
     int lifetime;
-    string yearofo;
+    int yearofo;
 public:
-    Unknow(int lt, string yofo, string sim, string nal) : Virus(sim, nal)
+    Unknow(int lt, int yofo, string sim, string nal) : Virus(sim, nal)
     {
          lifetime = lt;
          yearofo= yofo;
@@ -84,7 +84,7 @@ string correctString()
             {
                 tr = true;
                 cout << "Некорректный ввод строки!\nПопробуйте снова: ";
-                cout << str;
+               
                 break;
             }
         }
@@ -115,8 +115,8 @@ int main()
     setlocale(LC_ALL, "Russian");
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
-    int lt, kolvo, grup;
-    string type,yofo, sim, nal,bol;
+    int lt, yofo, kolvo, grup;
+    string type, sim, nal,bol;
     Virus* ptr[3];
 
     cout << "Рибовирус" << endl;
