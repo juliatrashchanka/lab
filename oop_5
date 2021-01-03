@@ -8,32 +8,25 @@ using namespace std;
 
 class Virus  // абстрактный базовый класс
 {
-public:
-    virtual void print() = 0;   // печать названия 	
-};
-
-class OneVirus : public Virus 	   // абстрактный производный класс
-{
 protected:
     string simmkaps;//симметрия капсоидов 
     string nalob;
 public:
-    OneVirus(string sim, string nal) // конструктор с параметрами
+    Virus(string sim, string nal) // конструктор с параметрами
     {
         simmkaps = sim;
         nalob = nal;
     }
-    virtual void print() = 0;
+    virtual void Print() = 0;   // печать названия 	
 };
 
-
-class Desoksivirus : public OneVirus
+class Desoksivirus : public Virus
 {
 protected:
     int kolvocepey;
     string typekisl;
 public:
-    Desoksivirus(int kolvo, string type, string sim, string nal) : OneVirus(sim, nal)
+    Desoksivirus(int kolvo, string type, string sim, string nal) : Virus(sim, nal)
     {
          kolvocepey = kolvo;
          typekisl = type;
@@ -43,13 +36,13 @@ public:
         cout << "Симметрия капсоидов: " << simmkaps << ";\nНаличие оболочки капсидов: " << nalob << ";\nКоличество цепей ДНК: " << kolvocepey << ";\nТип нуклеиновой кислоты: " << typekisl << endl;
     }
 };
-class Rybovirus : public OneVirus
+class Rybovirus : public Virus
 {
 protected:
     int gruppa;
     string bolezn;
 public:
-    Rybovirus(int grup, string bol, string sim, string nal) : OneVirus(sim, nal)
+    Rybovirus(int grup, string bol, string sim, string nal) : Virus(sim, nal)
     {
          gruppa = grup;
         bolezn = bol;
@@ -60,13 +53,13 @@ public:
     }
 };
 
-class Unknow :public OneVirus
+class Unknow :public Virus
 {
 protected:
     int lifetime;
     string yearofo;
 public:
-    Unknow(int lt, string yofo, string sim, string nal) : OneVirus(sim, nal)
+    Unknow(int lt, string yofo, string sim, string nal) : Virus(sim, nal)
     {
          lifetime = lt;
          yearofo= yofo;
@@ -125,34 +118,35 @@ int main()
     int lt, kolvo, grup;
     string type,yofo, sim, nal,bol;
     Virus* ptr[3];
-   
+
+    cout << "Рибовирус" << endl;
     cout << "Введите симметрию капсоидов: "; sim = correctString();
     cout << "Введите наличие оболочки капсидов (отсутствует или имеется): ";  nal = correctString();
     cout << "Введите группу: "; grup = Number();;
     cout << "Введите заболевание: "; bol = correctString();
     cout << "--------------------------" << endl;
     Rybovirus r(grup, bol, sim, nal);
-   
+    cout << "Дезоксивирус" << endl;
     cout << "Введите симметрию капсоидов: "; sim = correctString();
     cout << "Введите наличие оболочки капсидов (отсутствует или имеется): ";  nal = correctString();
     cout << "Введите количество цепей ДНК: ";  kolvo = Number();
     cout << "Введите тип нуклеиновой кислоты: "; type = correctString();
     cout << "--------------------------" << endl;
     Desoksivirus d(kolvo,  type,  sim,  nal);
-
+    cout << "Неизвестный" << endl;
     cout << "Введите симметрию капсоидов: "; sim = correctString();
     cout << "Введите наличие оболочки капсидов (отсутствует или имеется): ";  nal = correctString();
     cout << "Укажите продолжительность жизни (в сутках):";  lt = Number();
-    cout << "Укажите год открытия:";  yofo = correctString();
+    cout << "Укажите год открытия:";  yofo = Number();
     cout << "--------------------------" << endl;
     Unknow u(lt,yofo, sim, nal);
-    ptr[0] = &d;
-    ptr[1] = &r; // инициализация массива указателей ptr
+    ptr[0] = &r;
+    ptr[1] = &d; // инициализация массива указателей ptr
     ptr[2] = &u;
     for (int i = 0; i < 3; i++)
     {
-        ptr[i]->print();
+        ptr[i]->Print();
         cout << "--------------------------" << endl;
     }
     return 0;
-}
+} 
